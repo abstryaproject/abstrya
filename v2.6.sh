@@ -476,12 +476,6 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 </html> 
 SHTML
-  
-  write_html_pages() {
-  local WORKDIR="$1"
-  local SYS="$WORKDIR/config/includes.chroot/usr/share/abstrya/system"
-  mkdir -p "$SYS"
-
   # ... your HTML file writes ...
 
   # include local logos
@@ -717,7 +711,6 @@ set -euo pipefail
 echo "[ABSTRY] Running post-install configuration..."
 command -v chromium-browser >/dev/null || { echo "Install chromium-browser"; exit 1; }
 # 1) set root password
-ROOT_PASSWORD="${ROOT_PASSWORD:-$(openssl rand -base64 8)}"
 echo "root:$ROOT_PASSWORD" | chpasswd
 
 # 2) ensure NetworkManager enabled
@@ -814,7 +807,7 @@ write_image_hooks() {
 set -e
 # This runs inside the image chroot during lb build
 # Set root password in image (so live and installer have root password)
-echo "root:5000039" | chpasswd || true
+echo "root:0000" | chpasswd || true
 
 # Ensure scripts are executable
 chmod +x /usr/local/bin/abstrya-*.sh /usr/local/bin/abstry-welcome-dialog.sh /usr/local/bin/abstry-postinstall.sh || true
