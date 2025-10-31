@@ -45,7 +45,7 @@ permit-access  127.0.0.1
 
 forward-socks5t   /               127.0.0.1:9050 .
 # Optional: enable remote toggle (commented out by default)
-# enable-remote-http-toggle  1
+enable-remote-http-toggle  1
 
 # Keep other default behaviors; minimal config for HTTP->SOCKS bridging.
 PRIVCFG
