@@ -64,43 +64,110 @@ write_html_pages() {
 <html>    
 <head>    
 <meta charset="UTF-8">    
-<title>Abstrya</title>    
-<style>    
-body { 
-  background: #fff; 
-  color: #1E90FF; 
-  font-family: "Segoe UI", Arial, sans-serif; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  height: 100vh; 
-  margin: 0; 
-  text-align: center; 
-  flex-direction: column; 
-}    
-
-.logo {
-  width: 260px; /* adjust as needed */
-  height: auto;
-  margin-bottom: 1rem;
+<title>Abstrya</title>
+ <style>
+:root {
+  --bg: #ffffff;
+  --text: #1E90FF;
+  --input-bg: #1E90FF;
+  --input-text: #ffffff;
+  --placeholder: #ccc;
+  --accent: #1E90FF;
+  --status-warn: #ffb400;
+  --status-error: #ff4444;
+  --status-ok: #1E90FF;
 }
 
-p { 
-  font-size: 1.1rem; 
-  margin: 0.2rem 0; 
-}    
+[data-theme="dark"] {
+  --bg: #0e0e0e;
+  --text: #1E90FF;
+  --input-bg: #1E90FF;
+  --input-text: #222;
+  --placeholder: #222;
+  --accent: #87CEFA;
+  --status-warn: #ffd24d;
+  --status-error: #ff6666;
+  --status-ok: #6ab8ff;
+}
 
-.footer { 
-  position: fixed; 
-  bottom: 20px; 
-  font-size: 0.95rem; 
-  opacity: 0.85; 
-}    
-</style>    
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  flex-direction: column;
+  text-align: center;
+}
+
+.logo {
+  width: 260px;
+  height: auto;
+  margin-bottom: 1rem;
+  transition: opacity .3s ease;
+}
+.footer {
+  position: fixed;
+  bottom: 20px;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: 2px solid var(--text);
+  border-radius: 50%;
+  padding: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--text);
+  transition: 0.3s;
+}
+.theme-toggle:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+</style> 
+<script>
+function setTheme(mode) {
+  document.documentElement.setAttribute("data-theme", mode);
+  localStorage.setItem("theme", mode);
+  updateLogo();
+}
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute("data-theme");
+  setTheme(cur === "dark" ? "light" : "dark");
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem("theme") ||
+    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  setTheme(saved);
+}
+
+function updateLogo() {
+  const logo = document.querySelector(".logo");
+  if (!logo) return;
+  const mode = document.documentElement.getAttribute("data-theme");
+  logo.style.opacity = "0";
+  setTimeout(() => {
+    logo.src = mode === "dark" ? "./logo1.png" : "./logo.png";
+    logo.style.opacity = "1";
+  }, 150);
+}
+  </script>  
 </head>    
-<body>  
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>  
   <img src="./logo.png" alt="Abstrya Logo" class="logo" />
-  <p><b>lightweight OS designed for secure, automatic, and resilient connection</b></p>    
+  <p><b>A lightweight operating system built for secure, autonomous, and resilient connectivity.</b></p>    
   <div class="footer"><b>Powered by Abdullahi Ibrahim Lailaba</b></div>    
 </body>    
 </html>
@@ -112,7 +179,129 @@ WHTML
 <head>
 <meta charset="UTF-8">
 <title>Abstrya</title>
+
+<style>
+:root {
+  --bg: #ffffff;
+  --text: #1E90FF;
+  --input-bg: #1E90FF;
+  --input-text: #ffffff;
+  --placeholder: #ccc;
+  --accent: #1E90FF;
+  --status-warn: #ffb400;
+  --status-error: #ff4444;
+  --status-ok: #1E90FF;
+}
+
+[data-theme="dark"] {
+  --bg: #0e0e0e;
+  --text: #1E90FF;
+  --input-bg: #1E90FF;
+  --input-text: #222;
+  --placeholder: #222;
+  --accent: #87CEFA;
+  --status-warn: #ffd24d;
+  --status-error: #ff6666;
+  --status-ok: #6ab8ff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  flex-direction: column;
+  text-align: center;
+}
+
+.logo {
+  width: 260px;
+  height: auto;
+  margin-bottom: 1rem;
+  transition: opacity .3s ease;
+}
+
+input[type=url] {
+  width: 60%;
+  max-width: 520px;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  text-align: center;
+  background: var(--input-bg);
+  color: var(--input-text);
+}
+
+input[type=url]::placeholder {
+  color: var(--placeholder);
+}
+
+#addrType, #status {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.footer {
+  position: fixed;
+  bottom: 20px;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: 2px solid var(--text);
+  border-radius: 50%;
+  padding: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--text);
+  transition: 0.3s;
+}
+.theme-toggle:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+</style>
+
 <script>
+function setTheme(mode) {
+  document.documentElement.setAttribute("data-theme", mode);
+  localStorage.setItem("theme", mode);
+  updateLogo();
+}
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute("data-theme");
+  setTheme(cur === "dark" ? "light" : "dark");
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem("theme") ||
+    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  setTheme(saved);
+}
+
+function updateLogo() {
+  const logo = document.querySelector(".logo");
+  if (!logo) return;
+  const mode = document.documentElement.getAttribute("data-theme");
+  logo.style.opacity = "0";
+  setTimeout(() => {
+    logo.src = mode === "dark" ? "./logo1.png" : "./logo.png";
+    logo.style.opacity = "1";
+  }, 150);
+}
+
+/* ---------------- CONNECTION SCRIPT ------------------ */
 async function tryConnect() {
   const input = document.getElementById('addr');
   const status = document.getElementById('status');
@@ -122,32 +311,28 @@ async function tryConnect() {
   if (!raw) {
     typeLabel.textContent = 'Type: ⚠️ None';
     status.textContent = 'Please enter an address.';
-    typeLabel.style.color = status.style.color = '#ff4444';
+    typeLabel.style.color = status.style.color = getComputedStyle(status).getPropertyValue('--status-error');
     return;
   }
 
-  // Auto-prepend https:// if missing
   let url = raw;
   if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
 
   let hostname;
-  try {
-    hostname = new URL(url).hostname;
-  } catch {
+  try { hostname = new URL(url).hostname; }
+  catch {
     typeLabel.textContent = 'Type: ⚠️ Invalid Format';
-    typeLabel.style.color = '#ff4444';
+    typeLabel.style.color = 'var(--status-error)';
     status.textContent = 'Invalid address format.';
-    status.style.color = '#ff4444';
+    status.style.color = 'var(--status-error)';
     return;
   }
 
-  // Regex patterns
   const ipv4Pattern = /^(25[0-5]|2[0-4]\d|[0-1]?\d{1,2})(\.(25[0-5]|2[0-4]\d|[0-1]?\d{1,2})){3}$/;
   const ipv6Pattern = /^(([0-9a-fA-F]{0,4}:){1,7}[0-9a-fA-F]{0,4})$/;
   const isIPv4 = ipv4Pattern.test(hostname);
   const isIPv6 = ipv6Pattern.test(hostname);
 
-  // Identify address type
   const isLocalhost = hostname === 'localhost' || hostname === '::1' || hostname.startsWith('127.');
   const isPrivateIP =
     isIPv4 &&
@@ -156,9 +341,9 @@ async function tryConnect() {
      /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname));
   const isPublicIP = isIPv4 && !isLocalhost && !isPrivateIP;
   const isLocalDomain = hostname.endsWith('.local');
+  const isOnion = hostname.endsWith('.onion');
 
-  // Helper functions
-  const setType = (label, color = '#1E90FF') => {
+  const setType = (label, color = 'var(--status-ok)') => {
     typeLabel.textContent = `Type: ${label}`;
     typeLabel.style.color = color;
   };
@@ -176,147 +361,120 @@ async function tryConnect() {
     }
   };
 
-  // 🖥️ Localhost / Private IP / Local domain
+  if (isOnion) {
+    setType('🕸️ Dark Web (.onion)');
+    status.textContent = 'Checking...';
+    status.style.color = 'var(--status-warn)';
+    if (!/^http:\/\//i.test(raw)) url = 'http://' + hostname;
+
+    try {
+      await fetch(url, {mode: 'no-cors'});
+      status.textContent = 'Tor Proxy detected. Opening...';
+      status.style.color = 'var(--status-ok)';
+      window.location.href = url;
+    } catch {
+      status.innerHTML =
+      "⚠️ Onion cannot open directly.<br>Enable Tor Proxy: 127.0.0.1:8118";
+      status.style.color = 'var(--status-error)';
+    }
+    return;
+  }
+
+
   if (isLocalhost || isPrivateIP || isLocalDomain) {
-    if (isLocalDomain) setType('🏠 Local Domain (.local)', '#ffb400');
-    else if (isLocalhost) setType('🖥️ Localhost', '#ffb400');
-    else setType('🏠 Private Network', '#ffb400');
+    if (isLocalDomain) setType('🏠 .local Domain');
+    else if (isLocalhost) setType('🖥️ Localhost');
+    else setType('🏠 Private IP');
 
-    status.textContent = 'Connecting to local network server…';
-    status.style.color = '#ffb400';
+    status.textContent = 'Connecting locally…';
+    status.style.color = 'var(--status-warn)';
 
     const ok = await tryFetch(url);
     if (ok) {
-      status.textContent = 'Connected locally. Opening...';
-      status.style.color = '#1E90FF';
+      status.textContent = 'Connected. Opening...';
+      status.style.color = 'var(--status-ok)';
       window.location.href = url;
     } else {
-      status.textContent = 'Local server not reachable. Make sure it’s running.';
-      status.style.color = '#ff4444';
+      status.textContent = 'Local server offline.';
+      status.style.color = 'var(--status-error)';
     }
     return;
   }
 
-  // 🌍 Public IP
   if (isPublicIP || isIPv6) {
-    setType('🌎 Public IP Address', '#32CD32');
-    status.textContent = 'Checking public IP connection…';
-    status.style.color = '#ffb400';
-
+    setType('🌍 Public IP');
+    status.textContent = 'Checking IP…';
+    status.style.color = 'var(--status-warn)';
     const ok = await tryFetch(url);
     if (ok) {
-      status.textContent = 'Connected to public server. Opening...';
-      status.style.color = '#1E90FF';
+      status.textContent = 'Connected. Opening...';
+      status.style.color = 'var(--status-ok)';
       window.location.href = url;
     } else {
-      status.textContent = 'Public IP not reachable or server offline.';
-      status.style.color = '#ff4444';
+      status.textContent = 'Public IP not reachable.';
+      status.style.color = 'var(--status-error)';
     }
     return;
   }
 
-  // 🌐 Public Domain (check DNS)
-  setType('🌐 Search target', '#32CD32');
-  status.textContent = 'Checking DNS records…';
-  status.style.color = '#ffb400';
+  setType('🌐 Domain Lookup');
+  status.textContent = 'Checking DNS…';
+  status.style.color = 'var(--status-warn)';
+
   try {
     const dnsResponse = await fetch(`https://dns.google/resolve?name=${hostname}`);
     const dnsData = await dnsResponse.json();
 
     if (!dnsData.Answer || dnsData.Status !== 0) {
       status.textContent = 'Invalid or unknown domain.';
-      status.style.color = '#ff4444';
-      setType('⚠️ Unknown Domain', '#ff4444');
+      status.style.color = 'var(--status-error)';
+      setType('⚠️ Unknown Domain', 'var(--status-error)');
       return;
     }
-
-    // Check if DNS resolves to private IP
-    const answerIP = dnsData.Answer.find(a => a.type === 1)?.data;
-    if (answerIP && (answerIP.startsWith('10.') || answerIP.startsWith('192.168.') || /^172\.(1[6-9]|2\d|3[0-1])\./.test(answerIP))) {
-      setType('🏠 Private Domain (Local DNS)', '#ffb400');
-    } else {
-      setType('🌐 Public Internet Domain', '#32CD32');
-    }
   } catch {
-    status.textContent = 'Unable to verify domain. Please check your internet.';
-    status.style.color = '#ff4444';
+    status.textContent = 'DNS Check failed.';
+    status.style.color = 'var(--status-error)';
     return;
   }
 
-  // Connect to verified domain
-  status.textContent = 'Connecting to domain server…';
-  status.style.color = '#ffb400';
+  status.textContent = 'Connecting…';
+  status.style.color = 'var(--status-warn)';
   const ok = await tryFetch(url);
+
   if (ok) {
-    status.textContent = 'Connected successfully. Opening...';
-    status.style.color = '#1E90FF';
+    status.textContent = 'Connected. Opening...';
+    status.style.color = 'var(--status-ok)';
     window.location.href = url;
   } else {
-    status.textContent = 'Server not reachable or blocked.';
-    status.style.color = '#ff4444';
+    status.textContent = 'Server unreachable.';
+    status.style.color = 'var(--status-error)';
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const addr = document.getElementById('addr');
-  addr.addEventListener('keydown', e => {
+  loadTheme();
+  updateLogo();
+  document.getElementById('addr').addEventListener('keydown', e => {
     if (e.key === 'Enter') tryConnect();
   });
 });
 </script>
 
-<style>
-body {
-  background: #fff;
-  color: #1E90FF;
-  font-family: "Segoe UI", Arial, sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  flex-direction: column;
-  text-align: center;
-}
-.logo {
-  width: 260px;
-  height: auto;
-  margin-bottom: 1rem;
-}
-input[type=url] {
-  width: 60%;
-  max-width: 520px;
-  padding: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  text-align: center;
-  background: #1E90FF;
-  color: #fff;
-}
-input[type=url]::placeholder {
-  color: #ccc;
-}
-#addrType, #status {
-  margin-top: 8px;
-  font-weight: bold;
-}
-.footer {
-  position: fixed;
-  bottom: 20px;
-  font-size: 0.95rem;
-  opacity: 0.85;
-}
-</style>
 </head>
 
 <body>
-  <img src="./logo.png" alt="Abstrya OS" class="logo" />
-  <input id="addr" type="url" placeholder="Enter domain or IP address" />
-  <div id="addrType"></div>
-  <div id="status"></div>
-  <div class="footer"><b>Powered by Abdullahi Ibrahim Lailaba</b></div>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+
+<img src="./logo.png" class="logo" alt="Abstrya OS">
+
+<input id="addr" type="url" placeholder="Enter domain or IP address">
+<div id="addrType"></div>
+<div id="status"></div>
+
+<div class="footer"><b>Powered by Abdullahi Ibrahim Lailaba</b></div>
+
 </body>
-</html>
+</html> 
 SHTML
   
     # 🆕 Include local logo.png into the OS image
