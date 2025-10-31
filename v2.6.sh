@@ -477,15 +477,21 @@ document.addEventListener('DOMContentLoaded', () => {
 </html> 
 SHTML
   
-    # 🆕 Include local logo.png into the OS image
+  write_html_pages() {
+  local WORKDIR="$1"
+  local SYS="$WORKDIR/config/includes.chroot/usr/share/abstrya/system"
+  mkdir -p "$SYS"
+
+  # ... your HTML file writes ...
+
+  # include local logos
   if [ -f "$(dirname "$0")/logo.png" ]; then
     echo "[*] Including local logo.png into system tree..."
     cp "$(dirname "$0")/logo.png" "$SYS/logo.png"
   else
     echo "[WARN] logo.png not found in builder directory, skipping inclusion."
   fi
-}
-# 🆕 Include local logo1.png into the OS image
+
   if [ -f "$(dirname "$0")/logo1.png" ]; then
     echo "[*] Including local logo1.png into system tree..."
     cp "$(dirname "$0")/logo1.png" "$SYS/logo1.png"
@@ -493,6 +499,7 @@ SHTML
     echo "[WARN] logo1.png not found in builder directory, skipping inclusion."
   fi
 }
+
 # Write helper scripts: launch-browser, watcher, network settings, open-search
 write_helper_scripts() {
   local WORKDIR="$1"
@@ -708,9 +715,10 @@ write_abstry_postinstall() {
 set -euo pipefail
 
 echo "[ABSTRY] Running post-install configuration..."
-
+command -v chromium-browser >/dev/null || { echo "Install chromium-browser"; exit 1; }
 # 1) set root password
-echo "root:0000" | chpasswd || true
+ROOT_PASSWORD="${ROOT_PASSWORD:-$(openssl rand -base64 8)}"
+echo "root:$ROOT_PASSWORD" | chpasswd
 
 # 2) ensure NetworkManager enabled
 systemctl enable NetworkManager.service >/dev/null 2>&1 || true
@@ -742,7 +750,7 @@ autologin-session=openbox
 LDM
   # show fallback password to console and GUI if possible
   if command -v zenity >/dev/null 2>&1; then
-    sudo -u "$FALLBACK_USER" zenity --info --title="ABSTRY: Fallback account" --text="Fallback account created:\n\nUser: ${FALLBACK_USER}\nPassword: ${FALLBACK_PASS}\n\nPlease change this password on first login." --no-wrap || true
+    su - "$FALLBACK_USER" zenity --info --title="ABSTRY: Fallback account" --text="Fallback account created:\n\nUser: ${FALLBACK_USER}\nPassword: ${FALLBACK_PASS}\n\nPlease change this password on first login." --no-wrap || true
   else
     echo "FALLBACK_ACCOUNT:${FALLBACK_USER}:${FALLBACK_PASS}" > /root/ABSTRY-FALLBACK-INFO
     chmod 600 /root/ABSTRY-FALLBACK-INFO || true
