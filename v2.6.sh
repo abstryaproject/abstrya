@@ -16,7 +16,7 @@ DISTRO="jammy"                             # Ubuntu 22.04 LTS
 LABEL_BASE="ABSTRY-DESKTOP"
 ARCHS=( "amd64" "i386" "arm64" )           # arches to build
 IMAGE_OUTPUT_DIR="$BUILD_ROOT/output"
-ROOT_PASSWORD="5000039"                    # root password in installed systems
+ROOT_PASSWORD="0000"                    # root password in installed systems
 FALLBACK_USER="guest"                      # fallback username if installer user omitted
 FALLBACK_PASS_LENGTH=12
 POLL_INTERVAL=30
@@ -485,9 +485,9 @@ SHTML
     echo "[WARN] logo.png not found in builder directory, skipping inclusion."
   fi
 }
-# 🆕 Include local logo.png into the OS image
+# 🆕 Include local logo1.png into the OS image
   if [ -f "$(dirname "$0")/logo1.png" ]; then
-    echo "[*] Including local logo.png into system tree..."
+    echo "[*] Including local logo1.png into system tree..."
     cp "$(dirname "$0")/logo1.png" "$SYS/logo1.png"
   else
     echo "[WARN] logo1.png not found in builder directory, skipping inclusion."
@@ -568,27 +568,27 @@ write_welcome_dialog() {
   local WORKDIR="$1"
   local BIN="$WORKDIR/config/includes.chroot/usr/local/bin"
 
-  cat > "$BIN/abstry-welcome-dialog.sh" <<'WD'
+  cat > "$BIN/abstrya-welcome-dialog.sh" <<'WD'
 #!/bin/bash
 # Only show in live session
 if [ ! -f /cdrom/casper/filesystem.squashfs ] && [ ! -d /lib/live/mount/medium ] && [ ! -f /is_live_session ]; then exit 0; fi
 [ -z "$DISPLAY" ] && exit 0
-CHOICE=$(zenity --list --radiolist --title="ABSTRY DESKTOP" \
-  --text="Welcome to ABSTRYA DESKTOP — choose an action:" \
+CHOICE=$(zenity --list --radiolist --title="Abstrya OS" \
+  --text="Welcome to Abstrya OS — choose an action:" \
   --column="" --column="Action" \
-  TRUE "Try ABSTRYA LIVE (Network setup & demo)" FALSE "Install ABSTRY DESKTOP" \
+  TRUE "Try Abstrya OS" FALSE "Install Abstrya OS" \
   --height=220 --width=420 --ok-label="Select" --cancel-label="Close")
 [ -z "$CHOICE" ] && exit 0
-if echo "$CHOICE" | grep -qi "Try ABSTRY LIVE"; then
+if echo "$CHOICE" | grep -qi "Try Abstrya OS"; then
   if command -v nm-connection-editor >/dev/null 2>&1; then nm-connection-editor & else zenity --info --text="Network tools not found. Use Ctrl+Shift+T to open terminal." --no-wrap; fi
   exit 0
 fi
-if echo "$CHOICE" | grep -qi "Install ABSTRYA DESKTOP"; then
+if echo "$CHOICE" | grep -qi "Install Abstrya OS"; then
   if command -v calamares >/dev/null 2>&1; then calamares & else zenity --error --text="Installer not found." --no-wrap; fi
   exit 0
 fi
 WD
-  chmod +x "$BIN/abstry-welcome-dialog.sh"
+  chmod +x "$BIN/abstrya-welcome-dialog.sh"
 }
 
 # Openbox autostart and keybindings
@@ -606,7 +606,7 @@ fi
 # show welcome dialog only in live images
 if [ -f /cdrom/casper/filesystem.squashfs ] || [ -d /lib/live/mount/medium ] || [ -f /is_live_session ]; then
   sleep 5
-  /usr/local/bin/abstry-welcome-dialog.sh &
+  /usr/local/bin/abstrya-welcome-dialog.sh &
 fi
 AUTO
   chmod +x "$XDG/autostart"
@@ -661,9 +661,9 @@ CONF
 
   cat > "$CAL/branding/abstry/branding.desc" <<BRAND
 ---
-componentName: abstry
+componentName: abstrya
 strings:
-  productName: "ABSTRY DESKTOP"
+  productName: "Abstrya OS"
   version: "v2.6"
   shortVersion: "2.6"
 BRAND
@@ -671,7 +671,7 @@ BRAND
   # installer desktop entry
   cat > "$WORKDIR/config/includes.chroot/usr/share/applications/abstry-installer.desktop" <<DESK
 [Desktop Entry]
-Name=Install ABSTRY DESKTOP
+Name=Install Abstrya OS
 Exec=calamares
 Type=Application
 Terminal=false
@@ -710,7 +710,7 @@ set -euo pipefail
 echo "[ABSTRY] Running post-install configuration..."
 
 # 1) set root password
-echo "root:5000039" | chpasswd || true
+echo "root:0000" | chpasswd || true
 
 # 2) ensure NetworkManager enabled
 systemctl enable NetworkManager.service >/dev/null 2>&1 || true
