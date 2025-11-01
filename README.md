@@ -1,1 +1,1 @@
-<img src="./logo.png" alt="Abstrya Logo" class="logo" />
+<img src="./abstrya.png" alt="Abstrya Logo" class="logo" />
