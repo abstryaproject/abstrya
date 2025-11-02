@@ -885,6 +885,8 @@ calamares
 zenity
 curl
 sudo
+tor
+privoxy
 ca-certificates
 PKG
 }
