@@ -887,6 +887,8 @@ curl
 sudo
 tor
 privoxy
+wget
+git
 ca-certificates
 PKG
 }
