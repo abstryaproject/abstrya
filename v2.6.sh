@@ -889,7 +889,11 @@ tor
 privoxy
 wget
 git
-ca-certificates
+nginx
+apache
+certbot
+python3-certbot-nginx
+python3-certbot-apache
 PKG
 }
 
